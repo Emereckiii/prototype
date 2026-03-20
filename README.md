@@ -1,2 +1,0 @@
-# prototype
-techno high fidelity
