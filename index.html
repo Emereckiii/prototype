@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0E0F12">
+<title>SakayPoints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ══ HOME ══ -->
+  <div class="screen active" id="home">
+    <div class="app-bar">
+      <div>
+        <div class="greeting">MAGANDANG UMAGA ☀️</div>
+        <div class="username">JUAN DELA CRUZ</div>
+      </div>
+      <button class="icon-btn" onclick="this.querySelector('.notif-dot').style.display='none'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </button>
+    </div>
+
+    <div class="card-area">
+      <div class="jeep-card">
+        <div class="card-pattern"></div>
+        <svg class="card-bg-art" viewBox="0 0 200 200" fill="white">
+          <path d="M30 120 L170 120 L180 140 L20 140 Z"/>
+          <rect x="25" y="70" width="150" height="50" rx="5"/>
+          <circle cx="60" cy="148" r="15"/><circle cx="140" cy="148" r="15"/>
+          <rect x="35" y="40" width="130" height="32" rx="3"/>
+          <circle cx="55" cy="40" r="8" fill="rgba(255,255,255,0.3)"/><circle cx="145" cy="40" r="8" fill="rgba(255,255,255,0.3)"/>
+        </svg>
+        <div class="card-label">SAKAY POINTS BALANCE</div>
+        <div class="card-points" id="homePoints">2,450</div>
+        <div class="card-pts-label">POINTS</div>
+        <div class="card-bottom">
+          <div class="card-id">SP · 7823 · 4491</div>
+          <div class="card-tier">⭐ GOLD RIDER</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-title">TODAY'S RIDES</p>
+    <div class="daily-rides">
+      <div class="rides-header">
+        <span class="rides-label">Daily Ride Limit</span>
+        <span class="rides-count" id="homeDailyCount">3 / 5</span>
+      </div>
+      <div class="rides-dots" id="homeRideDots">
+        <div class="ride-dot filled"></div><div class="ride-dot filled"></div>
+        <div class="ride-dot filled"></div><div class="ride-dot"></div><div class="ride-dot"></div>
+      </div>
+      <p class="rides-sub" id="homeRidesSub">2 more rides available today • Resets midnight</p>
+    </div>
+
+    <div class="tap-section">
+      <button class="tap-btn" onclick="goToScan()">
+        <div class="tap-btn-shine"></div>
+        <div>
+          <div class="tap-title">TAP TO EARN POINTS</div>
+          <div class="tap-sub">Select your route &amp; scan to board</div>
+        </div>
+        <div class="tap-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+      </button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon orange">🚌</div>
+        <div class="stat-value" style="color:var(--gold)" id="statRides">47</div>
+        <div class="stat-label">Total Rides This Month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue">🏆</div>
+        <div class="stat-value" style="color:var(--blue)" id="statRedeemed">1,200</div>
+        <div class="stat-label">Points Redeemed</div>
+      </div>
+    </div>
+
+    <p class="section-title">RECENT RIDES</p>
+    <div class="rides-list" id="homeRidesList"></div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ══ SCAN ══ -->
+  <div class="screen" id="scan">
+    <div class="app-bar">
+      <div class="app-bar-title">EARN POINTS</div>
+      <button class="icon-btn" onclick="openQRSheet()" title="View QR Codes">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </button>
+    </div>
+
+    <!-- Route picker -->
+    <div class="route-picker-wrap">
+      <div class="route-picker-label">SELECT YOUR ROUTE</div>
+      <button class="route-picker-btn" id="routePickerBtn" onclick="togglePicker()">
+        <div class="rpb-left">
+          <span class="rpb-icon" id="pickerRouteIcon">🚌</span>
+          <div>
+            <div class="rpb-name" id="pickerRouteName">Trancoville Jeep</div>
+            <div class="rpb-pts" id="pickerRoutePts">+5 PTS</div>
+          </div>
+        </div>
+        <span class="rpb-arrow">▾</span>
+      </button>
+      <div class="route-dropdown" id="routeDropdown"></div>
+    </div>
+
+    <!-- Camera viewfinder -->
+    <div class="camera-wrap" id="cameraWrap">
+      <!-- Idle state -->
+      <div class="camera-idle" id="cameraIdle">
+        <div class="camera-idle-icon">📷</div>
+        <div class="camera-idle-title">Scan Jeepney QR Code</div>
+        <div class="camera-idle-sub">Point your camera at the QR code<br>posted inside the jeepney</div>
+        <button class="camera-start-btn" id="cameraStartBtn" onclick="startCamera()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          Open Camera
+        </button>
+      </div>
+
+      <!-- Live camera -->
+      <video id="camVideo" playsinline autoplay muted style="display:none"></video>
+      <canvas id="camCanvas" style="display:none"></canvas>
+
+      <!-- Viewfinder overlay (shown when camera active) -->
+      <div class="vf-overlay" id="vfOverlay" style="display:none">
+        <div class="vf-corner tl"></div>
+        <div class="vf-corner tr"></div>
+        <div class="vf-corner bl"></div>
+        <div class="vf-corner br"></div>
+        <div class="vf-scan-line" id="vfScanLine"></div>
+      </div>
+
+      <!-- Camera status bar -->
+      <div class="cam-status-bar" id="camStatusBar" style="display:none">
+        <span class="cam-status-dot"></span>
+        <span id="camStatusText">Scanning…</span>
+        <button class="cam-stop-btn" onclick="stopCamera()">✕ Stop</button>
+      </div>
+    </div>
+
+    <!-- Points preview -->
+    <div class="scan-pts-preview">
+      <div>
+        <div class="spp-label">YOU WILL EARN</div>
+        <div class="spp-pts" id="previewPts">+5 PTS</div>
+      </div>
+      <div>
+        <div class="spp-route-name" id="previewRoute">Trancoville Jeep</div>
+        <div class="spp-km" id="previewKm">Class 1 · ₱13 fare</div>
+      </div>
+    </div>
+
+    <!-- Daily limit -->
+    <div class="scan-limit-bar">
+      <div class="slb-row">
+        <span class="slb-label">Today's Ride Limit</span>
+        <span class="slb-count" id="scanLimitCount" style="color:var(--gold)">3 / 5</span>
+      </div>
+      <div class="slb-dots" id="scanDots">
+        <div class="slb-dot filled"></div><div class="slb-dot filled"></div>
+        <div class="slb-dot filled"></div><div class="slb-dot"></div><div class="slb-dot"></div>
+      </div>
+    </div>
+
+    <div class="limit-warning">
+      <div class="limit-icon">⚠️</div>
+      <div class="limit-text">Max <strong>5 rides/day</strong>. Points vary per route — longer rides = more points!</div>
+    </div>
+
+    <!-- Success overlay -->
+    <div class="scan-success" id="scanSuccess">
+      <div class="success-circle"><span id="successJeepIcon">🚌</span></div>
+      <div class="success-pts" id="successPts">+5 PTS</div>
+      <div class="success-label">POINTS EARNED</div>
+      <div class="success-route" id="successRoute">Trancoville Jeep</div>
+      <div class="success-km" id="successKm">Class 1 · ₱13 fare</div>
+      <button class="success-dismiss" onclick="dismissSuccess()">AWESOME! 🎉</button>
+    </div>
+  </div>
+
+  <!-- ══ QR SHEET MODAL ══ -->
+  <div class="qr-sheet-backdrop" id="qrSheetBackdrop" onclick="closeQRSheet()"></div>
+  <div class="qr-sheet" id="qrSheet">
+    <div class="qr-sheet-handle"></div>
+    <div class="qr-sheet-header">
+      <div class="qr-sheet-title">🚌 Jeepney QR Codes</div>
+      <div class="qr-sheet-sub">For drivers to display inside their jeepney</div>
+      <button class="qr-sheet-close" onclick="closeQRSheet()">✕</button>
+    </div>
+    <div class="qr-grid" id="qrGrid"></div>
+  </div>
+
+  <!-- ══ HISTORY ══ -->
+  <div class="screen" id="history">
+    <div class="app-bar">
+      <div class="app-bar-title">RIDE HISTORY</div>
+      <button class="filter-pill">📅 This Month</button>
+    </div>
+    <div class="history-summary">
+      <div class="summary-item"><div class="summary-val" id="histTotalRides">10</div><div class="summary-lab">Total Rides</div></div>
+      <div class="summary-item"><div class="summary-val" id="histPtsEarned">101</div><div class="summary-lab">Pts Earned</div></div>
+      <div class="summary-item"><div class="summary-val" id="histPtsSpent">3,500</div><div class="summary-lab">Pts Spent</div></div>
+    </div>
+    <div class="month-group">
+      <div class="month-label">March 2026</div>
+      <div id="historyList"></div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ══ REWARDS ══ -->
+  <div class="screen" id="rewards">
+    <div class="app-bar">
+      <div class="app-bar-title">REWARDS STORE</div>
+    </div>
+    <div class="rewards-balance">
+      <div><div class="rb-pts" id="rewardsPoints">2,450</div><div class="rb-label">AVAILABLE POINTS</div></div>
+      <div class="rb-icon">💰</div>
+    </div>
+    <p class="section-title" style="padding-top:4px">REDEEM REWARDS</p>
+    <div class="rewards-grid">
+      <div class="reward-card"><div class="reward-img r1"><span>🍔</span><span class="reward-tag">3,500 pts</span></div><div class="reward-body"><div class="reward-name">Jollibee Meal Voucher</div><div class="reward-brand">Jollibee · ₱100 value</div><div class="reward-pts-row"><div class="reward-cost">3,500 pts</div><button class="redeem-btn" onclick="redeemItem(this,3500,'Jollibee Voucher')">Redeem</button></div></div></div>
+      <div class="reward-card"><div class="reward-img r2"><span>📱</span><span class="reward-tag">4,500 pts</span></div><div class="reward-body"><div class="reward-name">₱50 Load Voucher</div><div class="reward-brand">Globe / Smart</div><div class="reward-pts-row"><div class="reward-cost">4,500 pts</div><button class="redeem-btn" onclick="redeemItem(this,4500,'Load Voucher')">Redeem</button></div></div></div>
+      <div class="reward-card"><div class="reward-img r3"><span>☕</span><span class="reward-tag">2,500 pts</span></div><div class="reward-body"><div class="reward-name">Free Coffee</div><div class="reward-brand">Bo's Coffee</div><div class="reward-pts-row"><div class="reward-cost">2,500 pts</div><button class="redeem-btn" onclick="redeemItem(this,2500,'Free Coffee')">Redeem</button></div></div></div>
+      <div class="reward-card"><div class="reward-img r4"><span>🍕</span><span class="reward-tag">4,500 pts</span></div><div class="reward-body"><div class="reward-name">Shakey's Voucher</div><div class="reward-brand">Shakey's · ₱120 value</div><div class="reward-pts-row"><div class="reward-cost">4,500 pts</div><button class="redeem-btn" onclick="redeemItem(this,4500,'Shakey\'s Voucher')">Redeem</button></div></div></div>
+      <div class="reward-card"><div class="reward-img r5"><span>🛒</span><span class="reward-tag">5,000 pts</span></div><div class="reward-body"><div class="reward-name">₱100 Groceries</div><div class="reward-brand">Puregold</div><div class="reward-pts-row"><div class="reward-cost">5,000 pts</div><button class="redeem-btn" onclick="redeemItem(this,5000,'Grocery Voucher')">Redeem</button></div></div></div>
+      <div class="reward-card"><div class="reward-img r6"><span>📚</span><span class="reward-tag">7,000 pts</span></div><div class="reward-body"><div class="reward-name">₱150 Book Voucher</div><div class="reward-brand">National Bookstore</div><div class="reward-pts-row"><div class="reward-cost">7,000 pts</div><button class="redeem-btn" onclick="redeemItem(this,7000,'Book Voucher')">Redeem</button></div></div></div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ══ PROFILE ══ -->
+  <div class="screen" id="profile">
+    <div class="app-bar">
+      <div class="app-bar-title">MY PROFILE</div>
+    </div>
+    <div class="profile-hero">
+      <div class="avatar">👤</div>
+      <div class="profile-name">JUAN DELA CRUZ</div>
+      <div class="profile-since">Member since January 2025</div>
+      <div class="tier-badge"><span>⭐</span><span class="tier-badge-text">GOLD RIDER</span></div>
+    </div>
+    <div class="tier-next">
+      <div class="tier-next-label">550 pts more to reach <strong>PLATINUM</strong></div>
+      <div class="tier-bar-wrap"><div class="tier-bar-fill"></div></div>
+      <div class="tier-bar-text" id="tierBarText">2,450 / 3,000 pts needed</div>
+    </div>
+
+    <p class="section-title" style="padding-top:16px;padding-bottom:8px">POINTS PER ROUTE</p>
+    <div style="margin:0 var(--content-pad) 8px;background:var(--surface);border-radius:var(--radius-card);overflow:hidden;border:1px solid rgba(255,255,255,0.06)" id="routeReference"></div>
+
+    <div class="settings-list">
+      <div class="settings-item"><div class="settings-icon s2">📍</div><span class="settings-label">Preferred Routes</span><span class="settings-arrow">›</span></div>
+      <div class="settings-item"><div class="settings-icon s3">🔔</div><span class="settings-label">Notifications</span><span class="settings-arrow">›</span></div>
+      <div class="settings-item"><div class="settings-icon s4">❓</div><span class="settings-label">Help &amp; Support</span><span class="settings-arrow">›</span></div>
+      <div class="settings-item" style="border:none"><div class="settings-icon" style="background:rgba(232,41,42,0.08)">🚪</div><span class="settings-label" style="color:var(--red)">Sign Out</span><span class="settings-arrow">›</span></div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- ══ BOTTOM NAV ══ -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('home',this)">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="nav-dot"></span></div>
+      <span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('scan',this)">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span class="nav-dot"></span></div>
+      <span class="nav-label">Scan</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('history',this)">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="nav-dot"></span></div>
+      <span class="nav-label">History</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('rewards',this)">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg><span class="nav-dot"></span></div>
+      <span class="nav-label">Rewards</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('profile',this)">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="nav-dot"></span></div>
+      <span class="nav-label">Profile</span>
+    </button>
+  </nav>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
